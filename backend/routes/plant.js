@@ -7,14 +7,14 @@ const checkAuth = require("../middleware/check-auth");
 
 router.get("/", (req, res, next) => {
     Plant.find()
-    .select("_id label inlineDistance rowDistance timeToPlant depth harvestTime wateringInfo")
+    .select("_id label inLineDistance rowDistance timeToPlant depth harvestTime wateringInfo")
     .then(docs => {
         res.status(200).json({
             plants: docs.map(doc => {
                 return{
                     _id: doc._id,
                     label: doc.label,
-                    inlineDistance: doc.inlineDistance,
+                    inLineDistance: doc.inLineDistance,
                     rowDistance: doc.rowDistance,
                     timeToPlant: doc.timeToPlant,
                     depth: doc.depth,
@@ -36,7 +36,7 @@ router.get("/", (req, res, next) => {
 
 router.get("/:label", (req, res, next) => {
   Plant.find({label:req.params.label})
-  .select("_id rowDistance timeToPlant depth harvestTime wateringInfo")
+  .select("_id inLineDistance rowDistance timeToPlant depth harvestTime wateringInfo")
   .exec()
   .then(docs => {
     res.status(200).json({
@@ -48,7 +48,8 @@ router.get("/:label", (req, res, next) => {
             timeToPlant: doc.timeToPlant,
             depth: doc.depth,
             harvestTime: doc.harvestTime,
-            wateringInfo: doc.wateringInfo
+            wateringInfo: doc.wateringInfo,
+            inLineDistance: doc.inLineDistance
         }
       })
     });
@@ -64,7 +65,7 @@ router.get("/:label", (req, res, next) => {
 
 router.get("/:plantId", (req, res, next) => {
   Plant.find({_id:req.params.plantId})
-  .select("label rowDistance timeToPlant depth harvestTime wateringInfo")
+  .select("label inLineDistance rowDistance timeToPlant depth harvestTime wateringInfo")
   .exec()
   .then(docs => {
     res.status(200).json({
@@ -73,10 +74,12 @@ router.get("/:plantId", (req, res, next) => {
         return{
             label: doc.label,
             rowDistance: doc.rowDistance,
+            inLineDistance: doc.inLineDistance,
             timeToPlant: doc.timeToPlant,
             depth: doc.depth,
             harvestTime: doc.harvestTime,
             wateringInfo: doc.wateringInfo
+
         }
       })
     });
@@ -95,7 +98,7 @@ router.post("/addPlant", (req, res, next) => {
     const plant = new Plant({
        _id: new mongoose.Types.ObjectId(),
        label: req.body.label,
-       inlineDistance: req.body.inlineDistance,
+       inLineDistance: req.body.inLineDistance,
         rowDistance: req.body.rowDistance,
         timeToPlant: req.body.timeToPlant,
         depth: req.body.depth, 

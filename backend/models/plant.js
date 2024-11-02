@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const plantSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     label: {type: String},
-    inlineDistance: {type: Number},
+    inLineDistance: {type: Number},
     rowDistance: {type: Number},
     timeToPlant: {type: String},
     depth: {type: Number},
