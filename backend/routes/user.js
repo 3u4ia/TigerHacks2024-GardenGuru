@@ -64,14 +64,14 @@ router.post("/signup", (req, res, next) => {
     .then(user => {
       if (user.length >= 1) {
         return res.status(409).json({
-          message: "Mail exists"
+          message: "User exists"
         });
       } }, User.find({ username: req.body.username})
       .exec()
       .then(user => {
         if (user.length >= 1) {
           return res.status(409).json({
-            message: "Mail exists"
+            message: "User exists"
           });
         } 
       else {
