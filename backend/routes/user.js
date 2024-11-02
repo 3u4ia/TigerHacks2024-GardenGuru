@@ -36,7 +36,7 @@ router.get("/", (req, res, next) => {
 
 router.get("/:userId", (req, res, next) => {
   User.find({_id:req.params.userId})
-  .select("email rating username businessType userType _id state city")
+  .select("email username _id)
   .exec()
   .then(docs => {
     res.status(200).json({
@@ -44,12 +44,7 @@ router.get("/:userId", (req, res, next) => {
       users: docs.map(doc => {
         return{
           username: doc.username,
-          businessType: doc.businessType,
           email: doc.email,
-          state: doc.state,
-          rating: doc.rating,
-          city: doc.city,
-          userType: doc.userType,
           _id: doc._id
         }
       })
@@ -113,7 +108,7 @@ router.post("/signup", (req, res, next) => {
 });
 
 router.post('/login', (req, res, next) => {
-  User.find({email: req.body.email})
+  User.find({username: req.body.username})
   .then(user=> {
     if(user.length < 1) {
       return res.status(401).json({
