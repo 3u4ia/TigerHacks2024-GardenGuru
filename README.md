@@ -1,4 +1,4 @@
-<img src="https://imgur.com/TJHZSFe.png" align="right" width=15%>
+<img src="https://imgur.com/a/RIvrCUR" align="right" width=15%>
 
 # Garden Guru 🌱
 ![React Native](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
