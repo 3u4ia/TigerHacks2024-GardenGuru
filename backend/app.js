@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const userRoutes = require('./routes/user');
 
 const customerPostRoutes = require('./routes/customerPost');
+const plantRoutes = require('./routes/plant');
 
 const mons = require("./nodemon.json");
 
@@ -38,6 +39,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use('/user', userRoutes);
 app.use('/customerPost', customerPostRoutes);
+app.use('/plant', plantRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Not found');
