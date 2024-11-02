@@ -1,18 +1,20 @@
 // src/screens/HomeScreen.js
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, Button, FlatList } from 'react-native';
-
-const plants = [
-  {id: 1, label: 'Carrots'},
-  {id: 2, label: 'Lettuce'},
-  {id: 3, label: 'Tomatoes'},
-  {id: 4, label: 'Cucumbers'},
-  {id: 5, label: 'Sweet Peppers'},
-  {id: 6, label: 'Beans'}
-];
+import { StyleSheet, View, Text, Button, FlatList, ScrollView } from 'react-native';
+import { plants } from '../components/data'
+// const plants = [
+//   {id: 1, label: 'Carrots'},
+//   {id: 2, label: 'Lettuce'},
+//   {id: 3, label: 'Tomatoes'},
+//   {id: 4, label: 'Cucumbers'},
+//   {id: 5, label: 'Sweet Peppers'},
+//   {id: 6, label: 'Beans'}
+// ];
 
 const GardenRegister = () => {
-  const [availablePlants, setAvailablePlants] = useState(plants);
+  const [availablePlants, setAvailablePlants] = useState(
+    [...plants].sort((a, b) => a.label.localeCompare(b.label))
+  );
   const [selectedPlants, setSelectedPlants] = useState([]);
 
     const handleSelectPlant = (plant) => {
@@ -25,7 +27,15 @@ const GardenRegister = () => {
     };
 
     const handleRemovePlant = (plant) => {
-      setAvailablePlants((prevAvailablePlants) => [...prevAvailablePlants, plant]);
+      // Add the plant back to availablePlants
+      setAvailablePlants((prevAvailablePlants) => {
+        // Create a new array with the plant added back
+        const updatedPlants = [...prevAvailablePlants, plant];
+        // Sort the updated array by label
+        return updatedPlants.sort((a, b) => a.label.localeCompare(b.label));
+      });
+      
+      // Remove the plant from selectedPlants
       setSelectedPlants((prevSelectedPlants) =>
         prevSelectedPlants.filter((item) => item.id !== plant.id)
       );
@@ -47,15 +57,17 @@ const GardenRegister = () => {
         <Text style={styles.title}>Select Your Garden Plants</Text>
         
         <Text style={styles.subtitle}>Available Plants</Text>
-        {availablePlants.map((plant) => (
-          <View key={plant.id} style={styles.buttonContainer}>
-            <Button
-              title={plant.label}
-              onPress={() => handleSelectPlant(plant)}
-              color="#4CAF50"
-            />
-          </View>
-        ))}
+        <ScrollView style={styles.scrollContainer}>
+          {availablePlants.map((plant) => (
+            <View key={plant.id} style={styles.buttonContainer}>
+              <Button
+                title={plant.label}
+                onPress={() => handleSelectPlant(plant)}
+                color="#4CAF50"
+              />
+            </View>
+          ))}
+        </ScrollView>
   
         <Text style={styles.subtitle}>Your Garden Plants</Text>
         <FlatList
@@ -86,6 +98,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginVertical: 5,
     width: '80%',
+    alignSelf: 'center'
   },
   container: {
     flex: 1,
@@ -104,6 +117,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#004d40',
     textAlign: 'center',
+  },
+  scrollContainer: {
+    maxHeight: 200, // Limit the height of the ScrollView
+    width: '100%',
+    marginBottom: 20, // Add some space below the ScrollView
+    
   },
   subtitle: {
     fontSize: 18,

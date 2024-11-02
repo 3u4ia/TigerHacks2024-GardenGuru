@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, TransitionSpecs, CardStyleInterpolators } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import * as SplashScreen from 'expo-splash-screen';
+//import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
 
 import HomeScreen from './src/screens/HomeScreen';
@@ -53,7 +53,7 @@ export default function App() {
 
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
-      await SplashScreen.hideAsync();
+      //await SplashScreen.hideAsync();
     }
   }, [fontsLoaded]);
 
