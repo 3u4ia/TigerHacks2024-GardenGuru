@@ -10,7 +10,7 @@ import { useFonts } from 'expo-font';
 import HomeScreen from './src/screens/HomeScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
 import LoginScreen from './src/screens/LoginScreen';
-import GardenRegisterScreen from './src/screens/GardenRegiserScreen';
+import GardenRegisterScreen from './src/screens/GardenRegisterScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();

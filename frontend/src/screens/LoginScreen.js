@@ -18,7 +18,7 @@ const LoginScreen = ({ navigation }) => {
 
       if (response.status == 200) {
         alert('Login Successful');
-        navigation.navigate('Home')
+        navigation.navigate('Tabs')
       } else {
         console.log(response.data)
       }
