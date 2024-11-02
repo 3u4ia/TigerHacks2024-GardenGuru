@@ -1,0 +1,21 @@
+BACKEND STUFF
+
+Use this as the base endpoint for our api https://us-central1-tigerhacks-backend.cloudfunctions.net/api
+
+VIEW LIST OF USERS
+
+    Send a GET request for api/user
+
+CREATE A NEW USER
+
+    Send a POST request for api/user/signup with json data similar to this:
+
+    {
+        "username":"name",
+        "password":"pass"
+
+    }
+
+SIGN IN
+
+    Send a POST request (exactly like the last one) to api/user/login
