@@ -36,7 +36,7 @@ router.get("/", (req, res, next) => {
 
 router.get("/:userId", (req, res, next) => {
   User.find({_id:req.params.userId})
-  .select("email username _id)
+  .select("email username _id")
   .exec()
   .then(docs => {
     res.status(200).json({
