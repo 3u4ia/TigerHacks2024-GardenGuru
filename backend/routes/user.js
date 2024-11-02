@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const customerPost = require("../models/customerPost");
 const checkAuth = require("../middleware/check-auth");
-const plant = require("../models/plant");
+const Plant = require("../models/plant");
 
 const User = require("../models/user");
 
