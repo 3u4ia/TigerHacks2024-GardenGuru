@@ -25,7 +25,8 @@
     "react-native": "0.74.5",
     "react-native-dotenv": "^3.4.11",
     "react-native-safe-area-context": "^4.14.0",
-    "react-native-screens": "^3.35.0"
+    "react-native-screens": "^3.35.0",
+    "expo-notifications": "~0.28.19"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
