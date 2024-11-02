@@ -19,3 +19,15 @@ CREATE A NEW USER
 SIGN IN
 
     Send a POST request (exactly like the last one) to api/user/login
+
+CREATE A NEW PLANT
+
+    
+    Send a POST request to api/plant/addPlant with JSON data like this
+
+        {"id": 50, "label": "Cranberry", "inLineDistance": 12, "rowDistance": 12, "timeToPlant": "Spring", "depth": 0.5, "harvestTime": "365 days", "wateringInfo": "Keep soil consistently moist"}
+
+VIEW THE PLANT ARRAY
+
+    Send a GET request to api/plant
+
