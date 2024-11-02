@@ -4,12 +4,11 @@ const morgan = require('morgan');
 
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const productRoutes = require('./routes/products');
-const orderRoutes = require('./routes/orders');
+
 const userRoutes = require('./routes/user');
-const businessPostRoutes = require('./routes/businessPost');
+
 const customerPostRoutes = require('./routes/customerPost');
-const fundraiserRoutes = require('./routes/fundraiser');
+
 const mons = require("./nodemon.json");
 
 var shoop;
@@ -20,7 +19,7 @@ if(process.env.MONGO_ATLAS_PW != undefined) {
 else{
     shoop = mons.env.MONGO_ATLAS_PW; 
 }
-mongoose.connect('mongodb+srv://devking2022:'+shoop+'@cluster.oe2dxef.mongodb.net/?retryWrites=true&w=majority&appName=Cluster'
+mongoose.connect('mongodb+srv://frostyData:'+shoop+'@cluster0.nlrrs.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
 );
 
 app.use((req, res, next) => {
@@ -34,16 +33,11 @@ app.use((req, res, next) => {
 });
 
 app.use(morgan('dev'));
-app.use('/uploads', express.static('uploads'));
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
 
-app.use('/products', productRoutes);
-app.use('/orders', orderRoutes);
+app.use(bodyParser.json());
 app.use('/user', userRoutes);
-app.use('/businessPost', businessPostRoutes);
 app.use('/customerPost', customerPostRoutes);
-app.use('/fundraiser', fundraiserRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Not found');

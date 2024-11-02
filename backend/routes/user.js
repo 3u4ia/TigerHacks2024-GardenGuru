@@ -11,7 +11,7 @@ const User = require("../models/user");
 
 router.get("/", (req, res, next) => {
   User.find()
-  .select("email rating businessType username userType _id state city")
+  .select("email username _id")
   .exec()
   .then(docs => {
     res.status(200).json({
@@ -19,39 +19,7 @@ router.get("/", (req, res, next) => {
       users: docs.map(doc => {
         return{
           username: doc.username,
-          businessType: doc.businessType,
           email: doc.email,
-          state: doc.state,
-          city: doc.city,
-          rating: doc.rating,
-          userType: doc.userType,
-          _id: doc._id
-        }
-      })
-    });
-  })
-  .catch(err => {
-    console.log(err);
-    res.status(500).json({
-      error: err
-    });
-  });
-});
-
-router.get("/locationSearch", (req, res, next) => {
-  User.find({city: req.body.city, state: req.body.state, userType: "business"})
-  .select("username rating businessType state city")
-  .exec()
-  .then(docs => {
-    res.status(200).json({
-      businesses: docs.map(doc => {
-        return{
-          username: doc.username,
-          email: doc.email,
-          businessType: doc.businessType,
-          state: doc.state,
-          city: doc.city,
-          rating: doc.rating,
           _id: doc._id
         }
       })
@@ -122,10 +90,6 @@ router.post("/signup", (req, res, next) => {
               _id: new mongoose.Types.ObjectId(),
               username: req.body.username,
               email: req.body.email,
-              city: req.body.city,
-              state: req.body.state,
-              userType: req.body.userType,
-              businessType: req.body.businessType,
               password: hash
             });
             user
@@ -219,38 +183,6 @@ router.delete("/purge", checkAuth, (req, res, next) => {
     res.status(500).json({
       error: err
     });
-  });
-});
-
-router.patch("/rating/:businessId", checkAuth, (req, res, next) => {
-  const id = req.params.businessId;
-  var total = 0;
-  var numberCount = 0;
-  var average = 0;
-  customerPost.find({businessId: id})
-  .select("rating")
-  .then(docs => {
-      numberCount = docs.length;
-      docs.map(doc => {
-          total += doc.rating
-      });
-      average = Math.floor(total/numberCount);
-      User.updateOne({ _id: id }, { $set: {rating: average} })
-      .exec()
-      .then(result => {
-        res.status(200).json({
-            message: 'Rating updated',
-            number_count: numberCount,
-            total: total,
-            new_average: average
-        });
-      })
-      .catch(err => {
-        console.log(err);
-        res.status(500).json({
-          error: err
-        });
-      });
   });
 });
 
