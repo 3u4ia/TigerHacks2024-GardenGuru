@@ -109,24 +109,23 @@ router.post("/signup", (req, res, next) => {
 });
 
 router.post('/login', (req, res, next) => {
-  User.find({username: req.body.username})
+  User.findOne({username: req.body.username})
   .then(user=> {
     if(user.length < 1) {
       return res.status(401).json({
         message: "Auth failed"
       })
     }
-    bcrypt.compare(req.body.password, user[0].password, (err, result) => {
-      if(err) {
+    bcrypt.compare(req.body.password, user.password, (err, result) => {
+      if(err || !result) {
         return res.status(401).json({
           message: "Auth failed"
         });
       }
       if (result) {
                 return res.status(200).json({
-          message: "Auth successful",
-          userType: user[0].userType,
-          _id: user[0]._id
+                  message: "Auth successful",
+                  user: user,
         });
       }
       return res.status(401).json({

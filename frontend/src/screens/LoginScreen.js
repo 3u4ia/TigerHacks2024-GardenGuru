@@ -4,10 +4,12 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 import { LinearGradient } from 'expo-linear-gradient';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import axios from 'axios';
+import { useUser } from '../../Context/UserContext';
 
 const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const { setUser } = useUser();
 
   const handleLogin = async () => {
     try {
@@ -18,7 +20,8 @@ const LoginScreen = ({ navigation }) => {
 
       if (response.status == 200) {
         alert('Login Successful');
-        navigation.navigate('Tabs')
+        setUser(data.user);
+        navigation.navigate('Tabs');
       } else {
         console.log(response.data)
       }

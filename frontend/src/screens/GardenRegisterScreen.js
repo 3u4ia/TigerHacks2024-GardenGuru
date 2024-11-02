@@ -2,14 +2,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, Button, FlatList, ScrollView } from 'react-native';
 import { plants } from '../components/data'
-// const plants = [
-//   {id: 1, label: 'Carrots'},
-//   {id: 2, label: 'Lettuce'},
-//   {id: 3, label: 'Tomatoes'},
-//   {id: 4, label: 'Cucumbers'},
-//   {id: 5, label: 'Sweet Peppers'},
-//   {id: 6, label: 'Beans'}
-// ];
 
 const GardenRegister = () => {
   const [availablePlants, setAvailablePlants] = useState(

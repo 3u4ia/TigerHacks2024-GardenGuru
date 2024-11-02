@@ -19,7 +19,7 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome to Your Garden Dashboard!</Text>
+      <Text style={styles.title}>Welcome to Your Garden Dashboard {user.username}!</Text>
       <Text style={styles.description}>Here you’ll find your gardening tools and resources.</Text>
       
       <Text style={styles.subtitle}>Your Selected Plants:</Text>
