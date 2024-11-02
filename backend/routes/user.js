@@ -59,7 +59,7 @@ router.get("/:userId", (req, res, next) => {
 });
 
 router.post("/signup", (req, res, next) => {
-  User.find({ email: req.body.email })
+  User.find({ username: req.body.username })
     .exec()
     .then(user => {
       if (user.length >= 1) {
