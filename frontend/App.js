@@ -20,7 +20,7 @@ function TabNavigator() {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
-
+          console.log(route)
           if (route.name === 'Home') {
             iconName = focused ? 'home' : 'home-outline';
           }
@@ -35,6 +35,7 @@ function TabNavigator() {
         },
       })}
     >
+      {/* Put More Tabs Here for each page to show up in tab navigator*/}
       <Tab.Screen name="Home" component={HomeScreen} />
     </Tab.Navigator>
   );

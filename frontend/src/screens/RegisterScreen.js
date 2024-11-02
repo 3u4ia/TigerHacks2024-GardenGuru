@@ -1,10 +1,34 @@
 // src/screens/RegisterScreen.js
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import axios from 'axios';
 
 const RegisterScreen = ({ navigation }) => {
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleRegister = async () => {
+    try {
+      const response = await axios.post('https://us-central1-tigerhacks-backend.cloudfunctions.net/api/user/signup', {
+        username,
+        email,
+        password,
+      });
+
+      if (response.status == 201) {
+        alert(response.data)
+        navigation.navigate('Login')
+      } else {
+        console.log(response.data)
+      }
+    } catch (error) {
+      console.error('Error:', error)
+    }
+  }
+
   return (
     <LinearGradient
       colors={['#a8e063', '#56ab2f']} // Same gradient background as Welcome page
@@ -18,12 +42,33 @@ const RegisterScreen = ({ navigation }) => {
         <Text style={styles.title}>Create Your Account</Text>
 
         {/* Input Fields */}
-        <TextInput style={styles.input} placeholder="Username" placeholderTextColor="#888" />
-        <TextInput style={styles.input} placeholder="Email" placeholderTextColor="#888" keyboardType="email-address" />
-        <TextInput style={styles.input} placeholder="Password" placeholderTextColor="#888" secureTextEntry />
+        <TextInput 
+          style={styles.input} 
+          placeholder="Username" 
+          placeholderTextColor="#888" 
+          value={username}
+          onChangeText={setUsername}
+        />
+        <TextInput 
+          style={styles.input} 
+          placeholder="Email" 
+          placeholderTextColor="#888" 
+          keyboardType="email-address" 
+          value={email}
+          onChangeText={setEmail}
+        />
+        <TextInput 
+          style={styles.input} 
+          placeholder="Password" 
+          placeholderTextColor="#888" 
+          secureTextEntry 
+          value={password}
+          onChangeText={setPassword}
+        />
 
         {/* Register Button */}
-        <TouchableOpacity style={styles.button}>
+        {/* Need to implement on press to submit registration with api */}
+        <TouchableOpacity style={styles.button} onPress={handleRegister}>
           <Ionicons name="leaf-outline" size={20} color="#fff" />
           <Text style={styles.buttonText}>Register</Text>
         </TouchableOpacity>
