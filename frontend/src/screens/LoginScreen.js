@@ -1,10 +1,31 @@
 // src/screens/LoginScreen.js
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import axios from 'axios';
 
 const LoginScreen = ({ navigation }) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('https://us-central1-tigerhacks-backend.cloudfunctions.net/api/user/login', {
+        username,
+        password,
+      });
+
+      if (response.status == 200) {
+        alert('Login Successful');
+        navigation.navigate('Home')
+      } else {
+        console.log(response.data)
+      }
+    } catch (error) {
+      console.error('Error', error)
+    }
+  }
   return (
     <LinearGradient colors={['#a8e063', '#56ab2f']} style={styles.background}>
       <View style={styles.container}>
@@ -15,11 +36,24 @@ const LoginScreen = ({ navigation }) => {
         <Text style={styles.title}>Welcome to Garden Guru!</Text>
 
         {/* Username and Password Fields */}
-        <TextInput style={styles.input} placeholder="Username" placeholderTextColor="#888" />
-        <TextInput style={styles.input} placeholder="Password" placeholderTextColor="#888" secureTextEntry />
+        <TextInput 
+          style={styles.input} 
+          placeholder="Username" 
+          placeholderTextColor="#888" 
+          value={username}
+          onChangeText={setUsername}
+        />
+        <TextInput 
+          style={styles.input} 
+          placeholder="Password" 
+          placeholderTextColor="#888" 
+          secureTextEntry 
+          value={password}
+          onChangeText={setPassword}
+        />
 
         {/* Login Button */}
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Ionicons name="log-in-outline" size={20} color="#fff" />
           <Text style={styles.buttonText}>Log In</Text>
         </TouchableOpacity>

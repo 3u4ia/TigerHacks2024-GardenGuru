@@ -10,6 +10,7 @@ import { useFonts } from 'expo-font';
 import HomeScreen from './src/screens/HomeScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
 import LoginScreen from './src/screens/LoginScreen';
+import GardenRegisterScreen from './src/screens/GardenRegiserScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -23,6 +24,8 @@ function TabNavigator() {
           console.log(route)
           if (route.name === 'Home') {
             iconName = focused ? 'home' : 'home-outline';
+          } else if (route.name === 'Garden Register') {
+            iconName = focused ? 'leaf' : 'leaf-outline';
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -37,6 +40,7 @@ function TabNavigator() {
     >
       {/* Put More Tabs Here for each page to show up in tab navigator*/}
       <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Garden Register" component={GardenRegisterScreen} />
     </Tab.Navigator>
   );
 }
@@ -60,7 +64,7 @@ export default function App() {
   return (
     <NavigationContainer onReady={onLayoutRootView}>
       <Stack.Navigator
-        initialRouteName="Login" // Start with Login screen
+        initialRouteName="Tabs" // Start with Login screen
         screenOptions={{
           gestureEnabled: true,
           gestureDirection: 'horizontal',
