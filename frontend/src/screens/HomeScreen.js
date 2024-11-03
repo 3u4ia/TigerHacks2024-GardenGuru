@@ -1,11 +1,19 @@
 // src/screens/HomeScreen.js
-import React from 'react';
+import React, {useEffect} from 'react';
 import { StyleSheet, View, Text, FlatList } from 'react-native';
 import { dataTest } from '../components/data';
 import { useUser } from '../../Context/UserContext';
 
 const HomeScreen = () => {
   const { user } = useUser();
+
+  useEffect(() => {
+    console.log("Loaded plantArray data:", user.plantArray);
+  }, [user.plantArray])
+
+  const hasPlants = user.plantArray && Array.isArray(user.plantArray) && user.plantArray[0].length > 0;
+
+  //console.log(user.plantArray[0]);
 
   const renderPlantItem = ({ item }) => (
     <View style={styles.plantContainer}>
@@ -25,11 +33,16 @@ const HomeScreen = () => {
       <Text style={styles.description}>Here you’ll find your gardening tools and resources.</Text>
       
       <Text style={styles.subtitle}>Your Selected Plants:</Text>
+      { hasPlants ? (
       <FlatList
-        data={user.plantArray} // Use your dataTest array here
-        keyExtractor={(item) => item.id.toString()}
+        data={user.plantArray[0]}
+        keyExtractor={(item) => item.id?.toString()}
         renderItem={renderPlantItem}
       />
+      ) : (
+        <Text>You have not chosen the plants in your garden just yet head to Garden Registration to add some plants.</Text>
+        )
+      }
     </View>
   );
 };

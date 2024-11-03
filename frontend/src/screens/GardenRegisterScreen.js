@@ -1,19 +1,38 @@
 // src/screens/HomeScreen.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, Button, FlatList, ScrollView } from 'react-native';
 import { plants } from '../components/data';
 import axios from 'axios';
 import { useUser } from '../../Context/UserContext';
 
 const GardenRegister = () => {
-  const { user } = useUser();
+  const { user, setUser } = useUser();
 
   console.log(user.username);
 
-  const [availablePlants, setAvailablePlants] = useState(
-    [...plants].sort((a, b) => a.label.localeCompare(b.label))
-  );
-  const [selectedPlants, setSelectedPlants] = useState([]);
+  const initialSelectedPlants = Array.isArray(user.plantArray) && user.plantArray.length > 0 ? user.plantArray[0] : [];
+
+  // Filter available plants to exclude those already selected
+  const initialAvailablePlants = plants.filter(plant => 
+    !initialSelectedPlants.some(selected => selected.id === plant.id)
+  ).sort((a, b) => a.label.localeCompare(b.label));
+
+  const [availablePlants, setAvailablePlants] = useState(initialAvailablePlants);
+  const [selectedPlants, setSelectedPlants] = useState(initialSelectedPlants);
+
+  useEffect(() => {
+    // If user.plantArray changes, update selectedPlants and availablePlants
+    if (user.plantArray[0]) {
+      setSelectedPlants(user.plantArray[0]);
+
+      // Update availablePlants to exclude newly selected plants, with error handling
+      const updatedAvailablePlants = plants.filter(plant => 
+        !user.plantArray[0].some(selected => selected?.id === plant.id)
+      ).sort((a, b) => a.label.localeCompare(b.label));
+      
+      setAvailablePlants(updatedAvailablePlants);
+    }
+  }, [user.plantArray]);
 
     const handleSelectPlant = (plant) => {
       // Add the plant to selectedPlants
@@ -52,6 +71,7 @@ const GardenRegister = () => {
         console.log(response.data.message);
         console.log('Updated user data:', response.data.user);
         setUser(response.data.user);
+        alert("Your plants have been registered.  Head back to Home to see information about the plants you chose.");
       } catch (error) {
         console.error("Error updating plant array:", error.response ? error.response.data : error.message);
       }
