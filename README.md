@@ -16,8 +16,5 @@
 - **Firebase Integration**: User authentication, data storage, and real-time updates using Firebase for a smooth, reliable experience.
 - **Interactive Interface**: Fun, cartoony design with a welcoming, simple interface.
 
-# Installation
-To download the latest version, visit: [Download Garden Guru](exp://exp.host/@armincordic/BloomMate)
-
 # App Screenshots
 <img src="https://i.imgur.com/b4YMX4A.jpg" width=32.5%>&nbsp;<img src="https://i.imgur.com/KsA4kJW.jpg" width=32.5%>&nbsp;<img src="https://i.imgur.com/lsjvk5e.jpg" width=32.5%>
