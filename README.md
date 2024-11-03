@@ -19,4 +19,4 @@
 To download the latest version, visit: [Download Garden Guru](https://your-download-link.com)
 
 # App Screenshots
-<img src="https://i.imgur.com/b4YMX4A.jpg" width=32.5%>&nbsp;<img src="https://imgur.com/sample2.png" width=32.5%>&nbsp;<img src="https://imgur.com/sample3.png" width=32.5%>
+<img src="https://i.imgur.com/b4YMX4A.jpg" width=32.5%>&nbsp;<img src="https://i.imgur.com/KsA4kJW.jpg" width=32.5%>&nbsp;<img src="https://imgur.com/sample3.png" width=32.5%>
