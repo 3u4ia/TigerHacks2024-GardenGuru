@@ -173,4 +173,26 @@ router.delete("/purge", checkAuth, (req, res, next) => {
   });
 });
 
+
+router.patch("/assignPlant/", (req, res, next) => {
+  const id = req.body.username;
+
+    const plants = req.body.plants
+  const updateOps = {"plants":plants};
+  User.findOneAndUpdate({ username: id }, { $set: updateOps })
+    .exec()
+    .then(result => {
+      res.status(200).json({
+          message: 'Plants Added',
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({
+        error: err
+      });
+    });
+});
+
+
 module.exports = router;
