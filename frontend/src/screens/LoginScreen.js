@@ -1,6 +1,6 @@
 // src/screens/LoginScreen.js
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import axios from 'axios';
@@ -26,47 +26,49 @@ const LoginScreen = ({ navigation }) => {
       console.error('Error', error);
       alert("Incorrect Login Information");
     }
-  }
+  };
+
   return (
     <LinearGradient colors={['#a8e063', '#56ab2f']} style={styles.background}>
-      <View style={styles.container}>
-        {/* Use "leaf-outline" icon instead of "tree-outline" */}
-        <Ionicons name="leaf-outline" size={80} color="#4CAF50" style={styles.icon} />
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0} // Offset for iOS
+      >
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <Ionicons name="leaf-outline" size={80} color="#4CAF50" style={styles.icon} />
 
-        {/* Title with Custom Font */}
-        <Text style={styles.title}>Welcome to Garden Guru!</Text>
+          <Text style={styles.title}>Welcome to Garden Guru!</Text>
 
-        {/* Username and Password Fields */}
-        <TextInput 
-          style={styles.input} 
-          placeholder="Username" 
-          placeholderTextColor="#888" 
-          value={username}
-          onChangeText={setUsername}
-        />
-        <TextInput 
-          style={styles.input} 
-          placeholder="Password" 
-          placeholderTextColor="#888" 
-          secureTextEntry 
-          value={password}
-          onChangeText={setPassword}
-        />
+          <TextInput
+            style={styles.input}
+            placeholder="Username"
+            placeholderTextColor="#888"
+            value={username}
+            onChangeText={setUsername}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            placeholderTextColor="#888"
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+          />
 
-        {/* Login Button */}
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Ionicons name="log-in-outline" size={20} color="#fff" />
-          <Text style={styles.buttonText}>Log In</Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={handleLogin}>
+            <Ionicons name="log-in-outline" size={20} color="#fff" />
+            <Text style={styles.buttonText}>Log In</Text>
+          </TouchableOpacity>
 
-        {/* Register Prompt */}
-        <Text style={styles.promptText}>
-          Don’t have an account?{' '}
-          <Text style={styles.linkText} onPress={() => navigation.navigate('Register')}>
-            Register here
+          <Text style={styles.promptText}>
+            Don’t have an account?{' '}
+            <Text style={styles.linkText} onPress={() => navigation.navigate('Register')}>
+              Register here
+            </Text>
           </Text>
-        </Text>
-      </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </LinearGradient>
   );
 };
@@ -77,10 +79,12 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+  },
+  scrollContainer: {
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
-    backgroundColor: 'transparent',
   },
   icon: {
     marginBottom: 20,
@@ -89,7 +93,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: '#fff',
     marginBottom: 20,
-    fontFamily: 'Cochin', // Use loaded font
+    fontFamily: 'Cochin',
     textAlign: 'center',
   },
   input: {
@@ -101,7 +105,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#4CAF50',
     color: '#4a4a4a',
-    fontFamily: 'ChalkboardSE', // Use loaded font
+    fontFamily: 'ChalkboardSE',
   },
   button: {
     flexDirection: 'row',

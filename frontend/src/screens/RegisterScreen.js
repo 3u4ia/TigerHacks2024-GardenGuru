@@ -1,6 +1,6 @@
 // src/screens/RegisterScreen.js
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import axios from 'axios';
@@ -18,69 +18,66 @@ const RegisterScreen = ({ navigation }) => {
         password,
       });
 
-      if (response.status == 201) {
-        alert(response.data)
-        navigation.navigate('Login')
+      if (response.status === 201) {
+        alert(response.data);
+        navigation.navigate('Login');
       } else {
-        console.log(response.data)
+        console.log(response.data);
       }
     } catch (error) {
-      console.error('Error:', error)
+      console.error('Error:', error);
     }
-  }
+  };
 
   return (
-    <LinearGradient
-      colors={['#a8e063', '#56ab2f']} // Same gradient background as Welcome page
-      style={styles.background}
-    >
-      <View style={styles.container}>
-        {/* Icon at the Top */}
-        <Ionicons name="flower-outline" size={80} color="#4CAF50" style={styles.icon} />
+    <LinearGradient colors={['#a8e063', '#56ab2f']} style={styles.background}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0} // Adjust offset for iOS
+      >
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <Ionicons name="flower-outline" size={80} color="#4CAF50" style={styles.icon} />
 
-        {/* Title */}
-        <Text style={styles.title}>Create Your Account</Text>
+          <Text style={styles.title}>Create Your Account</Text>
 
-        {/* Input Fields */}
-        <TextInput 
-          style={styles.input} 
-          placeholder="Username" 
-          placeholderTextColor="#888" 
-          value={username}
-          onChangeText={setUsername}
-        />
-        <TextInput 
-          style={styles.input} 
-          placeholder="Email" 
-          placeholderTextColor="#888" 
-          keyboardType="email-address" 
-          value={email}
-          onChangeText={setEmail}
-        />
-        <TextInput 
-          style={styles.input} 
-          placeholder="Password" 
-          placeholderTextColor="#888" 
-          secureTextEntry 
-          value={password}
-          onChangeText={setPassword}
-        />
+          <TextInput
+            style={styles.input}
+            placeholder="Username"
+            placeholderTextColor="#888"
+            value={username}
+            onChangeText={setUsername}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            placeholderTextColor="#888"
+            keyboardType="email-address"
+            value={email}
+            onChangeText={setEmail}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            placeholderTextColor="#888"
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+          />
 
-        {/* Register Button */}
-        {/* Need to implement on press to submit registration with api */}
-        <TouchableOpacity style={styles.button} onPress={handleRegister}>
-          <Ionicons name="leaf-outline" size={20} color="#fff" />
-          <Text style={styles.buttonText}>Register</Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={handleRegister}>
+            <Ionicons name="leaf-outline" size={20} color="#fff" />
+            <Text style={styles.buttonText}>Register</Text>
+          </TouchableOpacity>
 
-        {/* Login Prompt */}
-        <Text style={styles.promptText}>
-          Already have an account?{' '}
-          <Text style={styles.linkText} onPress={() => navigation.navigate('Login')}>
-            Log in here
+          <Text style={styles.promptText}>
+            Already have an account?{' '}
+            <Text style={styles.linkText} onPress={() => navigation.navigate('Login')}>
+              Log in here
+            </Text>
           </Text>
-        </Text>
-      </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </LinearGradient>
   );
 };
@@ -91,10 +88,12 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+  },
+  scrollContainer: {
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
-    backgroundColor: 'transparent',
   },
   icon: {
     marginBottom: 10,
@@ -103,7 +102,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     color: '#fff',
     marginBottom: 20,
-    fontFamily: 'Cochin', // Match the font from Welcome Page
+    fontFamily: 'Cochin',
     textAlign: 'center',
     fontWeight: 'bold',
   },
@@ -116,7 +115,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#4CAF50',
     color: '#4a4a4a',
-    fontFamily: 'ChalkboardSE', // Match the playful font from Welcome Page
+    fontFamily: 'ChalkboardSE',
   },
   button: {
     flexDirection: 'row',

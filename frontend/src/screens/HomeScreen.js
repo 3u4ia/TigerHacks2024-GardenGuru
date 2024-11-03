@@ -1,7 +1,8 @@
 // src/screens/HomeScreen.js
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, View, Text, FlatList } from 'react-native';
-import { dataTest } from '../components/data';
+import { LinearGradient } from 'expo-linear-gradient';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { useUser } from '../../Context/UserContext';
 
 const HomeScreen = () => {
@@ -9,11 +10,9 @@ const HomeScreen = () => {
 
   useEffect(() => {
     console.log("Loaded plantArray data:", user.plantArray);
-  }, [user.plantArray])
+  }, [user.plantArray]);
 
   const hasPlants = user.plantArray[0] && Array.isArray(user.plantArray) && user.plantArray[0].length > 0;
-
-  //console.log(user.plantArray[0]);
 
   const renderPlantItem = ({ item }) => (
     <View style={styles.plantContainer}>
@@ -28,56 +27,86 @@ const HomeScreen = () => {
   );
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Welcome to Your Garden Dashboard {user.username}!</Text>
-      <Text style={styles.description}>Here you’ll find your gardening tools and resources.</Text>
-      
-      <Text style={styles.subtitle}>Your Selected Plants:</Text>
-      { hasPlants ? (
-      <FlatList
-        data={user.plantArray[0]}
-        keyExtractor={(item) => item.id?.toString()}
-        renderItem={renderPlantItem}
-      />
-      ) : (
-        <Text>You have not chosen the plants in your garden just yet head to Garden Registration to add some plants.</Text>
-        )
-      }
-    </View>
+    <LinearGradient colors={['#a8e063', '#56ab2f']} style={styles.background}>
+      <View style={styles.container}>
+        <Ionicons name="leaf-outline" size={80} color="#4CAF50" style={styles.icon} />
+        
+        <Text style={styles.title}>Welcome to Garden Guru, {user.username}!</Text>
+        <Text style={styles.description}>Here you’ll find your gardening tools and resources.</Text>
+
+        <Text style={styles.subtitle}>Your Selected Plants:</Text>
+        
+        {hasPlants ? (
+          <FlatList
+            data={user.plantArray[0]}
+            keyExtractor={(item) => item.id?.toString()}
+            renderItem={renderPlantItem}
+            contentContainerStyle={styles.listContainer}
+          />
+        ) : (
+          <Text style={styles.noPlantsText}>
+            You have not chosen the plants in your garden yet. Head to Garden Registration to add some plants.
+          </Text>
+        )}
+      </View>
+    </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+  },
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
-    backgroundColor: '#e0f7fa',
+    alignItems: 'center',
+    padding: 16,
+    backgroundColor: 'transparent',
+  },
+  icon: {
+    marginBottom: 20,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#00796b',
-    marginBottom: 10,
+    fontSize: 30,
+    color: '#fff',
+    marginBottom: 20,
+    fontFamily: 'Cochin',
+    textAlign: 'center',
   },
   description: {
     fontSize: 16,
-    color: '#004d40',
+    color: '#ffffffcc',
     textAlign: 'center',
+    marginBottom: 20,
+    fontFamily: 'ChalkboardSE',
   },
   subtitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginVertical: 20,
-    color: '#00796b',
+    color: '#fff',
+    marginVertical: 15,
+    fontFamily: 'Cochin',
+    textAlign: 'center',
+  },
+  noPlantsText: {
+    fontSize: 16,
+    color: '#fff',
+    fontFamily: 'ChalkboardSE',
+    textAlign: 'center',
+    paddingHorizontal: 20,
+    marginTop: 20,
+  },
+  listContainer: {
+    width: '100%',
+    paddingHorizontal: 20,
   },
   plantContainer: {
     padding: 15,
     marginVertical: 5,
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    width: '100%', // Change to 100% to utilize full width
+    backgroundColor: '#ffffffa0',
+    borderRadius: 10,
+    width: '100%',
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowRadius: 5,
@@ -87,10 +116,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#333',
+    fontFamily: 'Cochin',
   },
   plantDetail: {
     fontSize: 16,
     color: '#555',
+    fontFamily: 'ChalkboardSE',
   },
 });
 

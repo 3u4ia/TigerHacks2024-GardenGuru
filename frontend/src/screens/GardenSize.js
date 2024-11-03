@@ -1,10 +1,8 @@
+// src/screens/GardenSize.js
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, Button, FlatList, ScrollView, Alert, SafeAreaView, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TextInput, ScrollView, Alert, SafeAreaView, TouchableOpacity } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useUser } from '../../Context/UserContext';
-
-
-
-
 
 const GardenSize = () => {
     const [gardenWidth, setGardenWidth] = useState('');
@@ -14,152 +12,150 @@ const GardenSize = () => {
 
     const calculateCropCount = () => {
         if (!user.plantArray[0] && !Array.isArray(user.plantArray[0])) {
-            alert("Please enter plants first via Garden Register.");
+            Alert.alert("Please enter plants first via Garden Register.");
             return;
-        }
-        else if(!gardenWidth || !gardenLength) {
+        } else if (!gardenWidth || !gardenLength) {
             Alert.alert('Please fill out all fields');
             return;
-        } 
+        }
 
-        let width = (gardenWidth*12) / user.plantArray[0].length;
-        let length = (gardenLength*12);
-        
+        let width = (gardenWidth * 12) / user.plantArray[0].length;
+        let length = (gardenLength * 12);
 
         let cropArray = [];
-        console.log(user.plantArray[0]);
         user.plantArray[0].forEach(element => {
-            
             let cropsInRow = Math.floor(length / element.inLineDistance);
             let rowsInGarden = Math.floor(width / element.rowDistance);
             let totalCrops = cropsInRow * rowsInGarden;
             cropArray.push(totalCrops);
-
-            // cropArray.append((gardenLength / element.inLineDistance) * (width / element.rowDistance));
-            
         });
 
-
-        // Prepare results to display
         const results = user.plantArray[0].map((plant, index) => {
             const plantName = plant.label;
             const totalNumCrops = cropArray[index];
             return `${plantName} can have ${totalNumCrops} crops`;
         });
 
-        setCropResults(results); // Update state with results
-    }
+        setCropResults(results);
+    };
 
-    // const handleSubmit = () => {
-    //     if (!user.plantArray[0] && !Array.isArray(user.plantArray[0])) {
-    //         alert("Please enter plants first via Garden Register.");
-    //         return;
-    //     }
-    //     else if(!gardenWidth || !gardenLength) {
-    //         Alert.alert('Please fill out all fields');
-    //         return;
-    //     } else {
-    //         calculateCropCount(gardenWidth, gardenLength);
-    //     }
+    return (
+        <LinearGradient colors={['#a8e063', '#56ab2f']} style={styles.background}>
+            <SafeAreaView style={styles.container}>
+                <Text style={styles.title}>Garden Details</Text>
 
+                <View style={styles.inputGroup}>
+                    <Text style={styles.label}>Width (ft)</Text>
+                    <TextInput
+                        style={styles.input}
+                        value={gardenWidth}
+                        onChangeText={setGardenWidth}
+                        keyboardType='number-pad'
+                        returnKeyType='done'
+                        placeholder='e.g., 200 ft'
+                        placeholderTextColor="#888"
+                    />
+                    <Text style={styles.label}>Length (ft)</Text>
+                    <TextInput
+                        style={styles.input}
+                        value={gardenLength}
+                        onChangeText={setGardenLength}
+                        keyboardType='number-pad'
+                        returnKeyType="done"
+                        placeholder='e.g., 200 ft'
+                        placeholderTextColor="#888"
+                    />
+                </View>
 
-    //     //Here is where I would send data to an api
-    //     console.log('Garden Width:', gardenWidth);
-    //     console.log('Garden Length:', gardenLength);
+                <TouchableOpacity style={styles.submitButton} onPress={calculateCropCount}>
+                    <Text style={styles.submitButtonText}>Submit</Text>
+                </TouchableOpacity>
 
-
-
-    //     Alert.alert('Your garden info has been submitted!');
-
-    // }
-    console.log("rendinging GardnSize()");
-    return(
-        <SafeAreaView style={styles.container}>
-            <Text style={styles.title}>Garden Details</Text>
-        
-            <View style={styles.inputGroup}>
-                <Text style={styles.label}>Width (ft)</Text>
-                <TextInput
-                    value={gardenWidth}
-                    onChangeText={setGardenWidth}
-                    keyboardType='number-pad'
-                    returnKeyType='done'
-                    placeholder='e.g., 200 ft '
-
-                />
-                <Text style={styles.label}>Length (ft)</Text>
-                <TextInput 
-                    value={gardenLength}
-                    onChangeText={setGardenLength}
-                    keyboardType='number-pad'
-                    returnKeyType="done"
-                    placeholder='200 ft long'
-                />
-            </View>
-            
-            <TouchableOpacity style={styles.submitButton} onPress={calculateCropCount}>
-                <Text style={styles.submitButtonText}>Submit</Text>
-            </TouchableOpacity>
-
-            {/* Scrollable view for crop results */}
-            <Text style={styles.subtitle}>Here's the recommended number of plants for your garden, assuming equal space for each crop.</Text>
-            <ScrollView style={styles.resultsContainer} contentInset={{ bottom: 20 }}>
-                {cropResults.map((result, index) => (
-                    <Text key={index} style={styles.resultText}>{result}</Text>
-                ))}
-            </ScrollView>
-
-        </SafeAreaView>
-        
-        
+                <Text style={styles.subtitle}>Here's the recommended number of plants for your garden, assuming equal space for each crop:</Text>
+                
+                <ScrollView style={styles.resultsContainer} contentInset={{ bottom: 20 }}>
+                    {cropResults.map((result, index) => (
+                        <Text key={index} style={styles.resultText}>{result}</Text>
+                    ))}
+                </ScrollView>
+            </SafeAreaView>
+        </LinearGradient>
     );
 };
 
 const styles = StyleSheet.create({
+    background: {
+        flex: 1,
+    },
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        padding: 20,
-        backgroundColor: '#e0f7fa',
-      },
-      title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#00796b',
-        marginBottom: 10,
-        padding: 10,
-      },
-      label: {
-        marginTop: 15,
-        fontWeight: 'bold',
         justifyContent: 'center',
-        paddingTop: 30,
-        
-      },
-      inputGroup: {
+        alignItems: 'center',
+        padding: 16,
+        backgroundColor: 'transparent',
+    },
+    title: {
+        fontSize: 30,
+        fontWeight: 'bold',
+        color: '#fff',
+        marginBottom: 20,
+        textAlign: 'center',
+        fontFamily: 'Cochin',
+    },
+    inputGroup: {
         alignContent: 'center',
         justifyContent: 'center',
         maxWidth: 300,
-        paddingTop: 0,
         alignItems: 'center',
-      },
-      submitButton: {
-        backgroundColor: '#00796b', // Primary color
+    },
+    label: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#ffffffcc',
+        marginTop: 20,
+        fontFamily: 'Cochin',
+    },
+    input: {
+        width: '90%',
+        padding: 12,
+        marginBottom: 15,
+        backgroundColor: '#ffffffa0',
+        borderRadius: 20,
+        borderWidth: 2,
+        borderColor: '#4CAF50',
+        color: '#4a4a4a',
+        fontFamily: 'ChalkboardSE',
+    },
+    submitButton: {
+        backgroundColor: '#4CAF50',
         paddingVertical: 12,
         paddingHorizontal: 30,
-        borderRadius: 25, // Rounded corners
-        alignItems: 'center', // Center text horizontally
-        shadowColor: '#000', // Shadow for iOS
+        borderRadius: 25,
+        alignItems: 'center',
+        shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 3,
-        elevation: 5, // Shadow for Android
-        marginTop: 20, // Spacing from other components
+        elevation: 5,
+        marginTop: 20,
+    },
+    submitButtonText: {
+        color: '#fff',
+        fontWeight: '700',
+        fontSize: 18,
+        fontFamily: 'Cochin',
+    },
+    subtitle: {
+        fontSize: 14,
+        color: '#ffffffcc',
+        textAlign: 'center',
+        paddingHorizontal: 20,
+        marginTop: 20,
+        fontFamily: 'ChalkboardSE',
     },
     resultsContainer: {
         marginTop: 20,
-        width: '100%',
+        width: '90%',
         maxHeight: 200,
         padding: 10,
         borderColor: '#00796b',
@@ -167,16 +163,12 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         backgroundColor: '#ffffff',
     },
-    subtitle: {
-        fontSize: 14,
-        padding: 25
-
-    },
     resultText: {
         fontSize: 18,
         marginVertical: 5,
         color: '#00796b',
+        fontFamily: 'ChalkboardSE',
     },
-})
+});
 
 export default GardenSize;

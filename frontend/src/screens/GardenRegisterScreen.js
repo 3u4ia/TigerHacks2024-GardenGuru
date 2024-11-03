@@ -1,6 +1,7 @@
-// src/screens/HomeScreen.js
+// src/screens/GardenRegister.js
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, Button, FlatList, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, FlatList, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { plants } from '../components/data';
 import axios from 'axios';
 import { useUser } from '../../Context/UserContext';
@@ -8,11 +9,8 @@ import { useUser } from '../../Context/UserContext';
 const GardenRegister = () => {
   const { user, setUser } = useUser();
 
-  console.log(user.username);
-
   const initialSelectedPlants = Array.isArray(user.plantArray) && user.plantArray.length > 0 ? user.plantArray[0] : [];
 
-  // Filter available plants to exclude those already selected
   const initialAvailablePlants = plants.filter(plant => 
     !initialSelectedPlants.some(selected => selected.id === plant.id)
   ).sort((a, b) => a.label.localeCompare(b.label));
@@ -21,11 +19,8 @@ const GardenRegister = () => {
   const [selectedPlants, setSelectedPlants] = useState(initialSelectedPlants);
 
   useEffect(() => {
-    // If user.plantArray changes, update selectedPlants and availablePlants
     if (user.plantArray[0]) {
       setSelectedPlants(user.plantArray[0]);
-
-      // Update availablePlants to exclude newly selected plants, with error handling
       const updatedAvailablePlants = plants.filter(plant => 
         !user.plantArray[0].some(selected => selected?.id === plant.id)
       ).sort((a, b) => a.label.localeCompare(b.label));
@@ -34,136 +29,175 @@ const GardenRegister = () => {
     }
   }, [user.plantArray]);
 
-    const handleSelectPlant = (plant) => {
-      // Add the plant to selectedPlants
-      setSelectedPlants((prevSelectedPlants) => [...prevSelectedPlants, plant]);
-      // Remove the plant from availablePlants
-      setAvailablePlants((prevAvailablePlants) =>
-        prevAvailablePlants.filter((item) => item.id !== plant.id)
-      );
-    };
+  const handleSelectPlant = (plant) => {
+    setSelectedPlants((prevSelectedPlants) => [...prevSelectedPlants, plant]);
+    setAvailablePlants((prevAvailablePlants) =>
+      prevAvailablePlants.filter((item) => item.id !== plant.id)
+    );
+  };
 
-    const handleRemovePlant = (plant) => {
-      // Add the plant back to availablePlants
-      setAvailablePlants((prevAvailablePlants) => {
-        // Create a new array with the plant added back
-        const updatedPlants = [...prevAvailablePlants, plant];
-        // Sort the updated array by label
-        return updatedPlants.sort((a, b) => a.label.localeCompare(b.label));
+  const handleRemovePlant = (plant) => {
+    setAvailablePlants((prevAvailablePlants) => {
+      const updatedPlants = [...prevAvailablePlants, plant];
+      return updatedPlants.sort((a, b) => a.label.localeCompare(b.label));
+    });
+    setSelectedPlants((prevSelectedPlants) =>
+      prevSelectedPlants.filter((item) => item.id !== plant.id)
+    );
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.put('https://us-central1-tigerhacks-backend.cloudfunctions.net/api/user/update-plants', {
+        username: user.username,
+        plantArray: selectedPlants
       });
-      
-      // Remove the plant from selectedPlants
-      setSelectedPlants((prevSelectedPlants) =>
-        prevSelectedPlants.filter((item) => item.id !== plant.id)
-      );
-    };
 
-    const handleSubmit = async () => {
-      try {
+      setUser(response.data.user);
+      Alert.alert("Success", "Your plants have been registered. Head back to Home to see information about the plants you chose.");
+    } catch (error) {
+      console.error("Error updating plant array:", error.response ? error.response.data : error.message);
+    }
+  };
 
-        console.log(selectedPlants);
-
-        const response = await axios.put('https://us-central1-tigerhacks-backend.cloudfunctions.net/api/user/update-plants', {
-          username: user.username,
-          plantArray: selectedPlants
-        });
-
-        console.log(response.data.message);
-        console.log('Updated user data:', response.data.user);
-        setUser(response.data.user);
-        alert("Your plants have been registered.  Head back to Home to see information about the plants you chose.");
-      } catch (error) {
-        console.error("Error updating plant array:", error.response ? error.response.data : error.message);
-      }
-    };
-
-    return (
+  return (
+    <LinearGradient colors={['#a8e063', '#56ab2f']} style={styles.background}>
       <View style={styles.container}>
         <Text style={styles.title}>Select Your Garden Plants</Text>
         
         <Text style={styles.subtitle}>Available Plants</Text>
-        <ScrollView style={styles.scrollContainer}>
+        <ScrollView style={styles.scrollContainer} contentInset={{ bottom: 20 }}>
           {availablePlants.map((plant) => (
-            <View key={plant.id} style={styles.buttonContainer}>
-              <Button
-                title={plant.label}
-                onPress={() => handleSelectPlant(plant)}
-                color="#4CAF50"
-              />
-            </View>
+            <TouchableOpacity key={plant.id} style={styles.plantButton} onPress={() => handleSelectPlant(plant)}>
+              <Text style={styles.plantButtonText}>{plant.label}</Text>
+            </TouchableOpacity>
           ))}
         </ScrollView>
   
         <Text style={styles.subtitle}>Your Garden Plants</Text>
         <FlatList
-        data={selectedPlants}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.selectedPlantContainer}>
-            <Text style={styles.selectedPlant}>{item.label}</Text>
-            <Button
-              title="Remove"
-              onPress={() => handleRemovePlant(item)}
-              color="#FF6347" // Tomato color for "Remove" button
-            />
-          </View>
-        )}
-      />
-      <Button
-        title="Submit"
-        onPress={handleSubmit}
-        color="#2196F3" // Blue color for "Submit" button
-        style={styles.submitButton}
-      />
+          data={selectedPlants}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <View style={styles.selectedPlantContainer}>
+              <Text style={styles.selectedPlantText}>{item.label}</Text>
+              <TouchableOpacity onPress={() => handleRemovePlant(item)} style={styles.removeButton}>
+                <Text style={styles.removeButtonText}>Remove</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        />
+
+        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+          <Text style={styles.submitButtonText}>Submit</Text>
+        </TouchableOpacity>
       </View>
-    );
-  }
+    </LinearGradient>
+  );
+};
 
 const styles = StyleSheet.create({
-  buttonContainer: {
-    marginVertical: 5,
-    width: '80%',
-    alignSelf: 'center'
+  background: {
+    flex: 1,
   },
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
-    backgroundColor: '#e0f7fa',
+    alignItems: 'center',
+    padding: 16,
+    backgroundColor: 'transparent',
   },
   title: {
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: 'bold',
-    color: '#00796b',
-    marginBottom: 10,
-  },
-  description: {
-    fontSize: 16,
-    color: '#004d40',
+    color: '#fff',
+    marginBottom: 20,
     textAlign: 'center',
-  },
-  scrollContainer: {
-    maxHeight: 200, // Limit the height of the ScrollView
-    width: '100%',
-    marginBottom: 20, // Add some space below the ScrollView
-    
+    fontFamily: 'Cochin',
   },
   subtitle: {
     fontSize: 18,
+    fontWeight: 'bold',
+    color: '#ffffffcc',
     marginTop: 20,
+    marginBottom: 10,
+    fontFamily: 'Cochin',
+  },
+  scrollContainer: {
+    maxHeight: 200,
+    width: '90%',
+    marginBottom: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)', // Semi-transparent background
+    borderRadius: 15,
+    padding: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  plantButton: {
+    backgroundColor: '#4CAF50a0', // Transparent green background
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 20,
+    marginVertical: 5,
+    alignItems: 'center',
+  },
+  plantButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+    fontFamily: 'ChalkboardSE',
   },
   selectedPlantContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    width: '80%',
+    width: '90%',
+    padding: 10,
     marginVertical: 5,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)', // Semi-transparent white background
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
-  selectedPlant: {
+  selectedPlantText: {
     fontSize: 16,
     color: '#333',
-    marginTop: 5
+    fontFamily: 'ChalkboardSE',
+  },
+  removeButton: {
+    backgroundColor: '#FF6347a0', // Semi-transparent red background
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    borderRadius: 20,
+  },
+  removeButtonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: 'bold',
+    fontFamily: 'Cochin',
+  },
+  submitButton: {
+    backgroundColor: '#2E7D32', // Dark green background
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    borderRadius: 25,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 5,
+    marginTop: 20,
+  },
+  submitButtonText: {
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 18,
+    fontFamily: 'Cochin',
   },
 });
 
