@@ -23,8 +23,11 @@ const LoginScreen = ({ navigation }) => {
       setUser(userData);
       navigation.navigate('Tabs');
     } catch (error) {
-      console.error('Error', error);
-      alert("Incorrect Login Information");
+      if (error.response.status === 401) {
+        alert("Invalid Credentials Provided.")
+      } else if (error.response.status === 500) {
+        alert("Invalid Credentials Provided.")
+      }
     }
   };
 

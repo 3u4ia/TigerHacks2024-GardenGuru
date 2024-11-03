@@ -19,13 +19,15 @@ const RegisterScreen = ({ navigation }) => {
       });
 
       if (response.status === 201) {
-        alert(response.data);
+        alert("You have successfully been registered.  Please login to continue.");
         navigation.navigate('Login');
-      } else {
-        console.log(response.data);
       }
     } catch (error) {
-      console.error('Error:', error);
+      if (error.response.status === 409) {
+        alert("The username or email has already been registered.")
+      } else if (error.response.status === 500) {
+        alert("The email you entered is not formatted correctly.")
+      }
     }
   };
 
