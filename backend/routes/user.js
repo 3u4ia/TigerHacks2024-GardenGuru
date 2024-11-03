@@ -141,6 +141,29 @@ router.post('/login', (req, res, next) => {
   })
 });
 
+router.put('/update-plants', async (req, res) => {
+  const { username, plantArray } = req.body; // Expecting username and new plantArray in the request body
+
+  try {
+      const user = await User.findOne({ username});
+
+      if (!user) {
+          return res.status(404).json({ message: "User not found" });
+      }
+
+      user.plantArray = plantArray;
+      await user.save();
+
+      res.status(200).json({
+          message: "Plant array updated successfully",
+          user: user // Return the updated user object
+      });
+  } catch (error) {
+      console.error("Error updating plant array:", error.response ? error.response.data : error.message);
+      res.status(500).json({ error: err.message });
+  }
+});
+
 router.delete("/:userId", checkAuth, (req, res, next) => {
   User.deleteOne({ _id: req.params.userId })
     .exec()

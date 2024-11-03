@@ -2,8 +2,10 @@
 import React from 'react';
 import { StyleSheet, View, Text, FlatList } from 'react-native';
 import { dataTest } from '../components/data';
+import { useUser } from '../../Context/UserContext';
 
 const HomeScreen = () => {
+  const { user } = useUser();
 
   const renderPlantItem = ({ item }) => (
     <View style={styles.plantContainer}>
@@ -24,7 +26,7 @@ const HomeScreen = () => {
       
       <Text style={styles.subtitle}>Your Selected Plants:</Text>
       <FlatList
-        data={dataTest} // Use your dataTest array here
+        data={user.plantArray} // Use your dataTest array here
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderPlantItem}
       />

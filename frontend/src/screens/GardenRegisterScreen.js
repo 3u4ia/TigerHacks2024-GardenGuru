@@ -1,9 +1,15 @@
 // src/screens/HomeScreen.js
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, Button, FlatList, ScrollView } from 'react-native';
-import { plants } from '../components/data'
+import { plants } from '../components/data';
+import axios from 'axios';
+import { useUser } from '../../Context/UserContext';
 
 const GardenRegister = () => {
+  const { user } = useUser();
+
+  console.log(user.username);
+
   const [availablePlants, setAvailablePlants] = useState(
     [...plants].sort((a, b) => a.label.localeCompare(b.label))
   );
@@ -33,15 +39,22 @@ const GardenRegister = () => {
       );
     };
 
-    const handleSubmit = () => {
-      // Prepare the data to be sent to the API
-      const plantData = selectedPlants.map((plant) => plant.label);
-      
-      // Here you can implement your API submission logic
-      console.log('Submitting selected plants:', plantData);
-  
-      // Show a success alert for now
-      alert('Your selected plants have been submitted!');
+    const handleSubmit = async () => {
+      try {
+
+        console.log(selectedPlants);
+
+        const response = await axios.put('https://us-central1-tigerhacks-backend.cloudfunctions.net/api/user/update-plants', {
+          username: user.username,
+          plantArray: selectedPlants
+        });
+
+        console.log(response.data.message);
+        console.log('Updated user data:', response.data.user);
+        setUser(response.data.user);
+      } catch (error) {
+        console.error("Error updating plant array:", error.response ? error.response.data : error.message);
+      }
     };
 
     return (

@@ -18,13 +18,10 @@ const LoginScreen = ({ navigation }) => {
         password,
       });
 
-      if (response.status == 200) {
-        alert('Login Successful');
-        setUser(data.user);
-        navigation.navigate('Tabs');
-      } else {
-        console.log(response.data)
-      }
+      const userData = response.data.user;
+      console.log(userData);
+      setUser(userData);
+      navigation.navigate('Tabs');
     } catch (error) {
       console.error('Error', error)
     }
