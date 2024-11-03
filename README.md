@@ -5,6 +5,7 @@
 ![Expo](https://img.shields.io/badge/expo-000020?style=for-the-badge&logo=expo&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 ![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase&logoColor=white)
+![MongoDB](https://img.shields.io/badge/mongodb-%2347A248.svg?style=for-the-badge&logo=mongodb&logoColor=white)
 
 **Garden Guru** is a beginner-friendly gardening app for users of all experience levels to learn about plant care, space allocation, and seasonal growing tips. Whether you're just starting with a small garden or expanding to multiple plants, Garden Guru helps you calculate the optimal layout, water frequency, and compatible crops for your space. Take the guesswork out of gardening and let Garden Guru guide you every step of the way!
 
