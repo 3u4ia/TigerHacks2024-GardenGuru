@@ -103,7 +103,7 @@ const GardenSize = () => {
 
             {/* Scrollable view for crop results */}
             <Text style={styles.subtitle}>Here's the recommended number of plants for your garden, assuming equal space for each crop.</Text>
-            <ScrollView style={styles.resultsContainer}>
+            <ScrollView style={styles.resultsContainer} contentInset={{ bottom: 20 }}>
                 {cropResults.map((result, index) => (
                     <Text key={index} style={styles.resultText}>{result}</Text>
                 ))}
