@@ -11,7 +11,7 @@ const HomeScreen = () => {
     console.log("Loaded plantArray data:", user.plantArray);
   }, [user.plantArray])
 
-  const hasPlants = user.plantArray && Array.isArray(user.plantArray) && user.plantArray[0].length > 0;
+  const hasPlants = user.plantArray[0] && Array.isArray(user.plantArray) && user.plantArray[0].length > 0;
 
   //console.log(user.plantArray[0]);
 

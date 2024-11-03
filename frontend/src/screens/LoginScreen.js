@@ -23,7 +23,8 @@ const LoginScreen = ({ navigation }) => {
       setUser(userData);
       navigation.navigate('Tabs');
     } catch (error) {
-      console.error('Error', error)
+      console.error('Error', error);
+      alert("Incorrect Login Information");
     }
   }
   return (
